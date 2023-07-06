@@ -1,0 +1,48 @@
+steps:
+
+- checkout: none
+
+- task: DownloadPipelineArtifact@2
+  displayName: Download Unit Testing artifact
+  inputs:
+    artifactName: 'UnitTesting-drop'
+    targetPath: '$(Build.SourcesDirectory)/UnitTesting'
+
+- task: DownloadPipelineArtifact@2
+  displayName: Download Api artifact
+  inputs:
+    artifactName: 'Api-drop'
+    targetPath: '$(Build.SourcesDirectory)/Api'
+
+- script: |
+    cd $(Build.SourcesDirectory)/UnitTesting
+    dotnet tool install -g dotnet-reportgenerator-globaltool            
+  displayName: 'Install report generator'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Run Unit Tests'
+  inputs:
+    command: 'test'
+    projects: '$(Build.SourcesDirectory)/UnitTesting/UnitTesting.csproj'
+    arguments: '--collect "XPlat Code Coverage" --logger trx --results-directory UnitTesting/TestResults'
+    publishTestResults: false
+
+- task: PublishTestResults@2
+  displayName: 'Publish Test Results'
+  inputs:
+    testResultsFormat: VSTest
+    testResultsFiles: '**/*.trx'
+    searchFolder: '$(Build.SourcesDirectory)/UnitTesting/TestResults'
+
+- task: PowerShell@2
+  displayName: 'Create Code Coverage Report'
+  inputs:
+    targetType: 'inline'
+    script: reportgenerator -reports:$(Build.SourcesDirectory)/UnitTesting/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/UnitTesting/CodeCoverage -reporttypes:HtmlInline_AzurePipelines
+        
+- task: PublishCodeCoverageResults@1
+  displayName: 'Publish code coverage results'
+  inputs:
+    codeCoverageTool: Cobertura
+    summaryFileLocation: '$(Build.SourcesDirectory)/UnitTesting/TestResults/**/coverage.cobertura.xml'
+    pathToSources: '$(Build.SourcesDirectory)/Api/'

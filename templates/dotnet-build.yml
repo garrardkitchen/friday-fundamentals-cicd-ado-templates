@@ -1,0 +1,48 @@
+parameters:
+- name: applicationName
+  type: string
+- name: toPublish
+  type: boolean
+  
+steps:
+- task: UseDotNet@2
+  displayName: Use .NET SDK
+  inputs:
+    packageType: sdk
+    version: $(dotnetRuntime)
+    
+- task: DotNetCoreCLI@2
+  displayName: Restore dependencies
+  inputs:
+    command: restore
+    projects: '$(Build.SourcesDirectory)/${{parameters.applicationName}}/${{parameters.applicationName}}.csproj'
+
+- task: DotNetCoreCLI@2
+  displayName: Build
+  inputs:
+    command: build
+    projects: '$(Build.SourcesDirectory)/${{parameters.applicationName}}/${{parameters.applicationName}}.csproj'
+
+- task: DotNetCoreCLI@2
+  condition: eq(${{parameters.toPublish}}, true)
+  displayName: Pubish
+  inputs:
+    command: publish
+    projects: '$(Build.SourcesDirectory)/${{parameters.applicationName}}/${{parameters.applicationName}}.csproj'
+    publishWebProjects: false
+    arguments: '-o $(Build.ArtifactStagingDirectory)/Output/${{parameters.applicationName}}'
+    zipAfterPublish: true
+    modifyOutputPath: true
+
+- task: PublishBuildArtifacts@1
+  condition: eq(${{parameters.toPublish}}, true)
+  displayName: Publish ${{parameters.applicationName}} zip Artifact
+  inputs:            
+    ArtifactName: ${{parameters.applicationName}}zip-drop
+    PathToPublish: $(Build.ArtifactStagingDirectory)/Output/${{parameters.applicationName}}
+
+- task: PublishBuildArtifacts@1
+  displayName: Publish ${{parameters.applicationName}} Artifact
+  inputs:            
+    ArtifactName: ${{parameters.applicationName}}-drop
+    PathToPublish: $(Build.SourcesDirectory)/${{parameters.applicationName}}    
