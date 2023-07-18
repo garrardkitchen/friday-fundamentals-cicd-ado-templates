@@ -55,7 +55,7 @@ steps:
   inputs:
     command: 'test'
     projects: '$(Build.SourcesDirectory)/test/UnitTesting_Web/UnitTesting_Web.csproj'
-    arguments: '--collect "XPlat Code Coverage" --logger trx --results-directory UnitTesting_Web/TestResults'
+    arguments: '--collect "XPlat Code Coverage" --logger trx --results-directory $(Build.SourcesDirectory)/test/UnitTesting_Web/TestResults'
     publishTestResults: false
 
 - task: PublishTestResults@2
@@ -87,7 +87,7 @@ steps:
 #   inputs:
 #     command: 'test'
 #     projects: '$(Build.SourcesDirectory)/test/UnitTesting_Api/UnitTesting_Api.csproj'
-#     arguments: '--collect "XPlat Code Coverage" --logger trx --results-directory UnitTesting_Api/TestResults'
+#     arguments: '--collect "XPlat Code Coverage" --logger trx --results-directory $(Build.SourcesDirectory)/test/UnitTesting_Api/TestResults'
 #     publishTestResults: false
 
 # - task: PublishTestResults@2
