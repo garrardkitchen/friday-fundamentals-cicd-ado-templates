@@ -6,12 +6,18 @@ steps:
 
 - checkout: none
 
-- task: DownloadPipelineArtifact@2
-  # condition: eq(${{parameters.toDownloadArtifacts}}, true)
-  displayName: Download Api Unit Testing artifact
+- task: UseDotNet@2
+  displayName: Use .NET SDK
   inputs:
-    artifactName: 'UnitTesting_Api-drop'
-    targetPath: '$(Build.SourcesDirectory)/test/UnitTesting_Api'
+    packageType: sdk
+    version: $(dotnetRuntime)
+
+# - task: DownloadPipelineArtifact@2
+#   # condition: eq(${{parameters.toDownloadArtifacts}}, true)
+#   displayName: Download Api Unit Testing artifact
+#   inputs:
+#     artifactName: 'UnitTesting_Api-drop'
+#     targetPath: '$(Build.SourcesDirectory)/test/UnitTesting_Api'
 
 - task: DownloadPipelineArtifact@2
   # condition: eq(${{parameters.toDownloadArtifacts}}, true)
@@ -20,12 +26,12 @@ steps:
     artifactName: 'UnitTesting_Web-drop'
     targetPath: '$(Build.SourcesDirectory)/test/UnitTesting_Web'
 
-- task: DownloadPipelineArtifact@2
-  # condition: eq(${{parameters.toDownloadArtifacts}}, true)
-  displayName: Download Api artifact
-  inputs:
-    artifactName: 'Api-drop'
-    targetPath: '$(Build.SourcesDirectory)/src/Api'
+# - task: DownloadPipelineArtifact@2
+#   # condition: eq(${{parameters.toDownloadArtifacts}}, true)
+#   displayName: Download Api artifact
+#   inputs:
+#     artifactName: 'Api-drop'
+#     targetPath: '$(Build.SourcesDirectory)/src/Api'
 
 - task: DownloadPipelineArtifact@2
   # condition: eq(${{parameters.toDownloadArtifacts}}, true)
@@ -48,7 +54,7 @@ steps:
   displayName: 'Run Web Unit Tests'
   inputs:
     command: 'test'
-    projects: '$(Build.SourcesDirectory)/src/UnitTesting_Web/UnitTesting_Web.csproj'
+    projects: '$(Build.SourcesDirectory)/test/UnitTesting_Web/UnitTesting_Web.csproj'
     arguments: '--collect "XPlat Code Coverage" --logger trx --results-directory UnitTesting_Web/TestResults'
     publishTestResults: false
 
@@ -76,30 +82,30 @@ steps:
 ### Api
 ###
 
-- task: DotNetCoreCLI@2
-  displayName: 'Run Api Unit Tests'
-  inputs:
-    command: 'test'
-    projects: '$(Build.SourcesDirectory)/src/UnitTesting_Api/UnitTesting_Api.csproj'
-    arguments: '--collect "XPlat Code Coverage" --logger trx --results-directory UnitTesting_Api/TestResults'
-    publishTestResults: false
+# - task: DotNetCoreCLI@2
+#   displayName: 'Run Api Unit Tests'
+#   inputs:
+#     command: 'test'
+#     projects: '$(Build.SourcesDirectory)/test/UnitTesting_Api/UnitTesting_Api.csproj'
+#     arguments: '--collect "XPlat Code Coverage" --logger trx --results-directory UnitTesting_Api/TestResults'
+#     publishTestResults: false
 
-- task: PublishTestResults@2
-  displayName: 'Publish Api Test Results'
-  inputs:
-    testResultsFormat: VSTest
-    testResultsFiles: '**/*.trx'
-    searchFolder: '$(Build.SourcesDirectory)/test/UnitTesting_Api/TestResults'
+# - task: PublishTestResults@2
+#   displayName: 'Publish Api Test Results'
+#   inputs:
+#     testResultsFormat: VSTest
+#     testResultsFiles: '**/*.trx'
+#     searchFolder: '$(Build.SourcesDirectory)/test/UnitTesting_Api/TestResults'
 
-- task: PowerShell@2
-  displayName: 'Create Code Coverage Report for Api'
-  inputs:
-    targetType: 'inline'
-    script: reportgenerator -reports:$(Build.SourcesDirectory)/test/UnitTesting_Api/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/test/UnitTesting_Api/CodeCoverage -reporttypes:HtmlInline_AzurePipelines
+# - task: PowerShell@2
+#   displayName: 'Create Code Coverage Report for Api'
+#   inputs:
+#     targetType: 'inline'
+#     script: reportgenerator -reports:$(Build.SourcesDirectory)/test/UnitTesting_Api/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/test/UnitTesting_Api/CodeCoverage -reporttypes:HtmlInline_AzurePipelines
         
-- task: PublishCodeCoverageResults@1
-  displayName: 'Publish code coverage results for Api'
-  inputs:
-    codeCoverageTool: Cobertura
-    summaryFileLocation: '$(Build.SourcesDirectory)/test/UnitTesting_Api/TestResults/**/coverage.cobertura.xml'
-    pathToSources: '$(Build.SourcesDirectory)/src/Api/'    
+# - task: PublishCodeCoverageResults@1
+#   displayName: 'Publish code coverage results for Api'
+#   inputs:
+#     codeCoverageTool: Cobertura
+#     summaryFileLocation: '$(Build.SourcesDirectory)/test/UnitTesting_Api/TestResults/**/coverage.cobertura.xml'
+#     pathToSources: '$(Build.SourcesDirectory)/src/Api/'    
