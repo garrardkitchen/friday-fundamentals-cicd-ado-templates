@@ -55,7 +55,7 @@ steps:
   inputs:
     command: 'test'
     projects: '$(Build.SourcesDirectory)/test/UnitTesting_Web/UnitTesting_Web.csproj'
-    arguments: '--collect "XPlat Code Coverage" --logger trx --results-directory $(Build.SourcesDirectory)/test/UnitTesting_Web/TestResults'
+    arguments: '--collect "XPlat Code Coverage" --settings '$(Build.SourcesDirectory)/test/UnitTesting_Web/.runsettings' --logger trx --results-directory $(Build.SourcesDirectory)/test/UnitTesting_Web/TestResults'
     publishTestResults: false
 
 - task: PublishTestResults@2
@@ -69,7 +69,7 @@ steps:
   displayName: 'Create Code Coverage Report for Web'
   inputs:
     targetType: 'inline'
-    script: reportgenerator -reports:$(Build.SourcesDirectory)/test/UnitTesting_Web/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/test/UnitTesting_Web/CodeCoverage -reporttypes:HtmlInline_AzurePipelines
+    script: reportgenerator -reports:$(Build.SourcesDirectory)/test/UnitTesting_Web/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/test/UnitTesting_Web/CodeCoverage -reporttypes:HtmlInline_AzurePipelines 
         
 - task: PublishCodeCoverageResults@1
   displayName: 'Publish code coverage results for Web'
