@@ -1,7 +1,9 @@
 parameters:
 - name: applicationName
   type: string
-- name: toPublish
+- name: toPublishZip
+  type: boolean
+- name: toPublishApp
   type: boolean
 - name: folder
   type: string
@@ -30,7 +32,7 @@ steps:
     projects: '$(Build.SourcesDirectory)/${{parameters.folder}}/${{parameters.applicationName}}/${{parameters.applicationName}}.csproj'
 
 - task: DotNetCoreCLI@2
-  condition: eq(${{parameters.toPublish}}, true)
+  condition: eq(${{parameters.toPublishZip}}, true)
   displayName: Pubish
   inputs:
     command: publish
@@ -41,13 +43,14 @@ steps:
     modifyOutputPath: true
 
 - task: PublishBuildArtifacts@1
-  condition: eq(${{parameters.toPublish}}, true)
+  condition: eq(${{parameters.toPublishZip}}, true)
   displayName: Publish ${{parameters.applicationName}} zip Artifact
   inputs:            
     ArtifactName: ${{parameters.applicationName}}zip-drop
     PathToPublish: $(Build.ArtifactStagingDirectory)/Output/${{parameters.applicationName}}
 
 - task: PublishBuildArtifacts@1
+  condition: eq(${{parameters.toPublishApp}}, true)
   displayName: Publish ${{parameters.applicationName}} Artifact
   inputs:            
     ArtifactName: ${{parameters.applicationName}}-drop
