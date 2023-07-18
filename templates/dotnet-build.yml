@@ -14,7 +14,7 @@ parameters:
   
 steps:
 - task: UseDotNet@2
-  displayName: Use .NET SDK
+  displayName: Use .NET $(dotnetRuntime) SDK
   inputs:
     packageType: sdk
     version: $(dotnetRuntime)
