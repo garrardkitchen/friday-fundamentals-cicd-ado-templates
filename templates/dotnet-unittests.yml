@@ -55,7 +55,7 @@ steps:
   inputs:
     command: 'test'
     projects: '$(Build.SourcesDirectory)/test/UnitTesting_Web/UnitTesting_Web.csproj'
-    arguments: '--collect "XPlat Code Coverage" --settings '$(Build.SourcesDirectory)/test/UnitTesting_Web/.runsettings' --logger trx --results-directory $(Build.SourcesDirectory)/test/UnitTesting_Web/TestResults'
+    arguments: '--collect "XPlat Code Coverage" --settings "$(Build.SourcesDirectory)/test/UnitTesting_Web/.runsettings" --logger trx --results-directory $(Build.SourcesDirectory)/test/UnitTesting_Web/TestResults'
     publishTestResults: false
 
 - task: PublishTestResults@2
