@@ -3,6 +3,12 @@ parameters:
   type: string
 - name: toPublish
   type: boolean
+- name: folder
+  type: string
+  default: src
+  values:
+  - src
+  - test
   
 steps:
 - task: UseDotNet@2
@@ -15,20 +21,20 @@ steps:
   displayName: Restore dependencies
   inputs:
     command: restore
-    projects: '$(Build.SourcesDirectory)/${{parameters.applicationName}}/${{parameters.applicationName}}.csproj'
+    projects: '$(Build.SourcesDirectory)/${{parameters.folder}}/${{parameters.applicationName}}/${{parameters.applicationName}}.csproj'
 
 - task: DotNetCoreCLI@2
   displayName: Build
   inputs:
     command: build
-    projects: '$(Build.SourcesDirectory)/${{parameters.applicationName}}/${{parameters.applicationName}}.csproj'
+    projects: '$(Build.SourcesDirectory)/${{parameters.folder}}/${{parameters.applicationName}}/${{parameters.applicationName}}.csproj'
 
 - task: DotNetCoreCLI@2
   condition: eq(${{parameters.toPublish}}, true)
   displayName: Pubish
   inputs:
     command: publish
-    projects: '$(Build.SourcesDirectory)/${{parameters.applicationName}}/${{parameters.applicationName}}.csproj'
+    projects: '$(Build.SourcesDirectory)/${{parameters.folder}}/${{parameters.applicationName}}/${{parameters.applicationName}}.csproj'
     publishWebProjects: false
     arguments: '-o $(Build.ArtifactStagingDirectory)/Output/${{parameters.applicationName}}'
     zipAfterPublish: true
