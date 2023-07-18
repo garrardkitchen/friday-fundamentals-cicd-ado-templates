@@ -51,7 +51,7 @@ steps:
 
 - task: PublishBuildArtifacts@1
   condition: eq(${{parameters.toPublishApp}}, true)
-  displayName: Publish ${{parameters.applicationName}} Artifact
+  displayName: Publish ${{parameters.applicationName}} build Artifact
   inputs:            
     ArtifactName: ${{parameters.applicationName}}-drop
     PathToPublish: $(Build.SourcesDirectory)/${{parameters.folder}}/${{parameters.applicationName}}    
