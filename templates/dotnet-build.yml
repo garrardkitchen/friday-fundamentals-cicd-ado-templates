@@ -51,4 +51,4 @@ steps:
   displayName: Publish ${{parameters.applicationName}} Artifact
   inputs:            
     ArtifactName: ${{parameters.applicationName}}-drop
-    PathToPublish: $(Build.SourcesDirectory)/${{parameters.applicationName}}    
+    PathToPublish: $(Build.SourcesDirectory)/${{parameters.folder}}/${{parameters.applicationName}}    
