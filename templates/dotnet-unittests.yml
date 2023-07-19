@@ -59,75 +59,27 @@ steps:
     publishTestResults: false
     testRunTitle: 'Web Unit Tests'
 
-# - task: DotNetCoreCLI@2
-#   displayName: 'Run Web Unit Tests'
-#   inputs:
-#     command: 'test'
-#     projects: '$(Build.SourcesDirectory)/test/UnitTesting_Web/UnitTesting_Web.csproj'
-#     arguments: '--collect "XPlat Code Coverage" --settings "$(Build.SourcesDirectory)/test/UnitTesting_Web/.runsettings.xml" --logger trx --results-directory $(Build.SourcesDirectory)/test/UnitTesting_Web/TestResults'
-#     publishTestResults: false
-
-# - task: PublishTestResults@2
-#   displayName: 'Publish Web Test Results'
-#   inputs:
-#     testResultsFormat: VSTest
-#     testResultsFiles: '**/*.trx'
-#     searchFolder: '$(Build.SourcesDirectory)/test/UnitTesting_Web/TestResults'
-
-# - task: PowerShell@2
-#   displayName: 'Create Code Coverage Report for Web'
-#   inputs:
-#     targetType: 'inline'
-#     script: reportgenerator -reports:$(Build.SourcesDirectory)/test/UnitTesting_Web/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/test/UnitTesting_Web/CodeCoverage -reporttypes:HtmlInline_AzurePipelines 
-        
-# - task: PublishCodeCoverageResults@1
-#   displayName: 'Publish code coverage results for Web'
-#   inputs:
-#     codeCoverageTool: Cobertura
-#     summaryFileLocation: '$(Build.SourcesDirectory)/test/UnitTesting_Web/TestResults/**/coverage.cobertura.xml'
-#     pathToSources: '$(Build.SourcesDirectory)/src/Web/'
-
 ###
 ### Api
 ###
 
 - task: DotNetCoreCLI@2
-  displayName: 'Run Api Unit Tests'
+  displayName: 'Run Api Unit Tests - L0'
   inputs:
     command: 'test'
     projects: '$(Build.SourcesDirectory)/test/UnitTesting_Api/UnitTesting_Api.csproj'
-    arguments: '--collect "XPlat Code Coverage" --settings "$(Build.SourcesDirectory)/test/UnitTesting_Api/.runsettings.xml" --logger trx --results-directory $(Build.SourcesDirectory)/test/TestResults' 
+    arguments: '--collect "XPlat Code Coverage" --settings "$(Build.SourcesDirectory)/test/UnitTesting_Api/.runsettings.xml" --logger trx --results-directory $(Build.SourcesDirectory)/test/TestResults --filter TestCategory=L0' 
     publishTestResults: false
     testRunTitle: 'Api Unit Tests'
 
-
-# - task: DotNetCoreCLI@2
-#   displayName: 'Run Api Unit Tests'
-#   inputs:
-#     command: 'test'
-#     projects: '$(Build.SourcesDirectory)/test/UnitTesting_Api/UnitTesting_Api.csproj'
-#     arguments: '--collect "XPlat Code Coverage" --settings "$(Build.SourcesDirectory)/test/UnitTesting_Api/.runsettings.xml" --logger trx --results-directory $(Build.SourcesDirectory)/test/UnitTesting_Api/TestResults'
-#     publishTestResults: false
-
-# - task: PublishTestResults@2
-#   displayName: 'Publish Api Test Results'
-#   inputs:
-#     testResultsFormat: VSTest
-#     testResultsFiles: '**/*.trx'
-#     searchFolder: '$(Build.SourcesDirectory)/test/UnitTesting_Api/TestResults'
-
-# - task: PowerShell@2
-#   displayName: 'Create Code Coverage Report for Api'
-#   inputs:
-#     targetType: 'inline'
-#     script: reportgenerator -reports:$(Build.SourcesDirectory)/test/UnitTesting_Api/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/test/UnitTesting_Api/CodeCoverage -reporttypes:HtmlInline_AzurePipelines
-        
-# - task: PublishCodeCoverageResults@1
-#   displayName: 'Publish code coverage results for Api'
-#   inputs:
-#     codeCoverageTool: Cobertura
-#     summaryFileLocation: '$(Build.SourcesDirectory)/test/UnitTesting_Api/TestResults/**/coverage.cobertura.xml'
-#     pathToSources: '$(Build.SourcesDirectory)/src/Api/'    
+- task: DotNetCoreCLI@2
+  displayName: 'Run Api Unit Tests - L1'
+  inputs:
+    command: 'test'
+    projects: '$(Build.SourcesDirectory)/test/UnitTesting_Api/UnitTesting_Api.csproj'
+    arguments: '--collect "XPlat Code Coverage" --settings "$(Build.SourcesDirectory)/test/UnitTesting_Api/.runsettings.xml" --logger trx --results-directory $(Build.SourcesDirectory)/test/TestResults --filter TestCategory=L1' 
+    publishTestResults: false
+    testRunTitle: 'Api Unit Tests'
 
 ###
 ### Code Coverage
