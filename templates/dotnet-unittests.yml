@@ -151,4 +151,6 @@ steps:
   inputs:
     codeCoverageTool: Cobertura
     summaryFileLocation: '$(Build.SourcesDirectory)/test/TestResults/**/coverage.cobertura.xml'
-    pathToSources: '$(Build.SourcesDirectory)/src/'    
+    pathToSources: |
+      $(Build.SourcesDirectory)/src/Api/
+      $(Build.SourcesDirectory)/src/Web/
