@@ -55,7 +55,7 @@ steps:
   inputs:
     command: 'test'
     projects: '$(Build.SourcesDirectory)/test/UnitTesting_Web/UnitTesting_Web.csproj'
-    arguments: '--collect "XPlat Code Coverage" --settings "$(Build.SourcesDirectory)/test/UnitTesting_Web/.runsettings.xml" --logger trx --results-directory $(Build.SourcesDirectory)/test/TestResults --filter TestCategory=L0|TestCategory=L1 --no-build'
+    arguments: '--collect "XPlat Code Coverage" --settings "$(Build.SourcesDirectory)/test/UnitTesting_Web/.runsettings.xml" --logger trx --results-directory $(Build.SourcesDirectory)/test/TestResults --filter TestCategory=L0|TestCategory=L1'
     publishTestResults: false
     testRunTitle: 'Web Unit Tests'
 
@@ -68,7 +68,7 @@ steps:
   inputs:
     command: 'test'
     projects: '$(Build.SourcesDirectory)/test/UnitTesting_Api/UnitTesting_Api.csproj'
-    arguments: '--collect "XPlat Code Coverage" --settings "$(Build.SourcesDirectory)/test/UnitTesting_Api/.runsettings.xml" --logger trx --results-directory $(Build.SourcesDirectory)/test/TestResults --filter TestCategory=L0 --no-build' 
+    arguments: '--collect "XPlat Code Coverage" --settings "$(Build.SourcesDirectory)/test/UnitTesting_Api/.runsettings.xml" --logger trx --results-directory $(Build.SourcesDirectory)/test/TestResults --filter TestCategory=L0' 
     publishTestResults: false
     testRunTitle: 'Api Unit Tests'
 
@@ -77,7 +77,7 @@ steps:
   inputs:
     command: 'test'
     projects: '$(Build.SourcesDirectory)/test/UnitTesting_Api/UnitTesting_Api.csproj'
-    arguments: '--collect "XPlat Code Coverage" --settings "$(Build.SourcesDirectory)/test/UnitTesting_Api/.runsettings.xml" --logger trx --results-directory $(Build.SourcesDirectory)/test/TestResults --filter TestCategory=L1 --no-build' 
+    arguments: '--collect "XPlat Code Coverage" --settings "$(Build.SourcesDirectory)/test/UnitTesting_Api/.runsettings.xml" --logger trx --results-directory $(Build.SourcesDirectory)/test/TestResults --filter TestCategory=L1' 
     publishTestResults: false
     testRunTitle: 'Api Unit Tests'
 
