@@ -47,7 +47,6 @@ steps:
     cd $(Build.SourcesDirectory)/${{parameters.folder}}/${{parameters.applicationName}}   
     ls -lt -R
     rm -r obj
-    rm -r bin/Debug
   displayName: 'Remove files'
 
 - task: PublishBuildArtifacts@1
