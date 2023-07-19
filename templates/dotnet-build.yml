@@ -45,7 +45,7 @@ steps:
     configuration: $(buildConfiguration)
 
 - script: |
-    cd $(Build.ArtifactStagingDirectory)/Output/
+    cd $(Build.SourcesDirectory)/${{parameters.folder}}/${{parameters.applicationName}}   
     ls -lt -R
     rm -r obj
     rm -r bin/Debug
