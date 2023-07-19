@@ -30,7 +30,7 @@ steps:
   inputs:
     command: build
     projects: '$(Build.SourcesDirectory)/${{parameters.folder}}/${{parameters.applicationName}}/${{parameters.applicationName}}.csproj'
-    configuration: $(buildConfiguration)
+    arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
   condition: eq(${{parameters.toPublishZip}}, true)
@@ -39,10 +39,9 @@ steps:
     command: publish
     projects: '$(Build.SourcesDirectory)/${{parameters.folder}}/${{parameters.applicationName}}/${{parameters.applicationName}}.csproj'
     publishWebProjects: false
-    arguments: '-o $(Build.ArtifactStagingDirectory)/Output/${{parameters.applicationName}}'
+    arguments: '-o $(Build.ArtifactStagingDirectory)/Output/${{parameters.applicationName}} --configuration $(buildConfiguration)'
     zipAfterPublish: true
-    modifyOutputPath: true
-    configuration: $(buildConfiguration)
+    modifyOutputPath: true    
 
 - script: |
     cd $(Build.SourcesDirectory)/${{parameters.folder}}/${{parameters.applicationName}}   
