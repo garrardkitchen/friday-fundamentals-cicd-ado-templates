@@ -57,7 +57,7 @@ steps:
     projects: '$(Build.SourcesDirectory)/test/UnitTesting_Web/UnitTesting_Web.csproj'
     arguments: '--collect "XPlat Code Coverage" --settings "$(Build.SourcesDirectory)/test/UnitTesting_Web/.runsettings.xml" --logger trx --results-directory $(Build.SourcesDirectory)/test/TestResults'
     publishTestResults: false
-
+    testRunTitle: 'Web Unit Tests'
 
 # - task: DotNetCoreCLI@2
 #   displayName: 'Run Web Unit Tests'
@@ -96,8 +96,9 @@ steps:
   inputs:
     command: 'test'
     projects: '$(Build.SourcesDirectory)/test/UnitTesting_Api/UnitTesting_Api.csproj'
-    arguments: '--collect "XPlat Code Coverage" --settings "$(Build.SourcesDirectory)/test/UnitTesting_Api/.runsettings.xml" --logger trx --results-directory $(Build.SourcesDirectory)/test/TestResults'
+    arguments: '--collect "XPlat Code Coverage" --settings "$(Build.SourcesDirectory)/test/UnitTesting_Api/.runsettings.xml" --logger trx --results-directory $(Build.SourcesDirectory)/test/TestResults' 
     publishTestResults: false
+    testRunTitle: 'Api Unit Tests'
 
 
 # - task: DotNetCoreCLI@2
@@ -150,5 +151,4 @@ steps:
   inputs:
     codeCoverageTool: Cobertura
     summaryFileLocation: '$(Build.SourcesDirectory)/test/TestResults/**/coverage.cobertura.xml'
-    pathToSources: '$(Build.SourcesDirectory)/src/Web/'
-    pathToSources: '$(Build.SourcesDirectory)/src/Api/'
+    pathToSources: '$(Build.SourcesDirectory)/src/'    
