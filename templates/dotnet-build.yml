@@ -1,12 +1,20 @@
 parameters:
 - name: applicationName
   type: string
-- name: toPublish
+- name: toPublishZip
   type: boolean
+- name: toPublishApp
+  type: boolean
+- name: folder
+  type: string
+  default: src
+  values:
+  - src
+  - test
   
 steps:
 - task: UseDotNet@2
-  displayName: Use .NET SDK
+  displayName: Use .NET $(dotnetRuntime) SDK
   inputs:
     packageType: sdk
     version: $(dotnetRuntime)
@@ -15,34 +23,42 @@ steps:
   displayName: Restore dependencies
   inputs:
     command: restore
-    projects: '$(Build.SourcesDirectory)/${{parameters.applicationName}}/${{parameters.applicationName}}.csproj'
+    projects: '$(Build.SourcesDirectory)/${{parameters.folder}}/${{parameters.applicationName}}/${{parameters.applicationName}}.csproj'
 
 - task: DotNetCoreCLI@2
   displayName: Build
   inputs:
     command: build
-    projects: '$(Build.SourcesDirectory)/${{parameters.applicationName}}/${{parameters.applicationName}}.csproj'
+    projects: '$(Build.SourcesDirectory)/${{parameters.folder}}/${{parameters.applicationName}}/${{parameters.applicationName}}.csproj'
+    arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
-  condition: eq(${{parameters.toPublish}}, true)
-  displayName: Pubish
+  condition: eq(${{parameters.toPublishZip}}, true)
+  displayName: Create ${{parameters.applicationName}} Publish output
   inputs:
     command: publish
-    projects: '$(Build.SourcesDirectory)/${{parameters.applicationName}}/${{parameters.applicationName}}.csproj'
+    projects: '$(Build.SourcesDirectory)/${{parameters.folder}}/${{parameters.applicationName}}/${{parameters.applicationName}}.csproj'
     publishWebProjects: false
-    arguments: '-o $(Build.ArtifactStagingDirectory)/Output/${{parameters.applicationName}}'
+    arguments: '-o $(Build.ArtifactStagingDirectory)/Output/${{parameters.applicationName}} --configuration $(buildConfiguration)'
     zipAfterPublish: true
-    modifyOutputPath: true
+    modifyOutputPath: true    
+
+- script: |
+    cd $(Build.SourcesDirectory)/${{parameters.folder}}/${{parameters.applicationName}}   
+    ls -lt -R
+    rm -r obj
+  displayName: 'Remove files'
 
 - task: PublishBuildArtifacts@1
-  condition: eq(${{parameters.toPublish}}, true)
+  condition: eq(${{parameters.toPublishZip}}, true)
   displayName: Publish ${{parameters.applicationName}} zip Artifact
   inputs:            
     ArtifactName: ${{parameters.applicationName}}zip-drop
     PathToPublish: $(Build.ArtifactStagingDirectory)/Output/${{parameters.applicationName}}
 
 - task: PublishBuildArtifacts@1
-  displayName: Publish ${{parameters.applicationName}} Artifact
+  condition: eq(${{parameters.toPublishApp}}, true)
+  displayName: Publish ${{parameters.applicationName}} build Artifact
   inputs:            
     ArtifactName: ${{parameters.applicationName}}-drop
-    PathToPublish: $(Build.SourcesDirectory)/${{parameters.applicationName}}    
+    PathToPublish: $(Build.SourcesDirectory)/${{parameters.folder}}/${{parameters.applicationName}}    
